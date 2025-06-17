@@ -25,7 +25,7 @@ class GFAlertViewController: UIViewController {
     }()
     
     let titleLabel: GFTitleLabel = {
-        let label = GFTitleLabel(textAligment: .center, fontSize: 20)
+        let label = GFTitleLabel(textAlignment: .center, fontSize: 20)
         return label
     }()
     
