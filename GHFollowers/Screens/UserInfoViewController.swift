@@ -37,6 +37,11 @@ class UserInfoViewController: UIViewController {
         return view
     }()
     
+    private let dateLabel: GFBodyLabel = {
+        let label = GFBodyLabel(textAligment: .center)
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -51,6 +56,7 @@ class UserInfoViewController: UIViewController {
         view.addSubview(itemViewStackView)
         itemViewStackView.addArrangedSubview(itemViewOne)
         itemViewStackView.addArrangedSubview(itemViewTwo)
+        view.addSubview(dateLabel)
     }
     
     private func buildConstraints() {
@@ -67,6 +73,11 @@ class UserInfoViewController: UIViewController {
             itemViewStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             itemViewStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             itemViewStackView.heightAnchor.constraint(equalToConstant: itemHeight * 2),
+            
+            dateLabel.topAnchor.constraint(equalTo: itemViewStackView.bottomAnchor, constant: padding),
+            dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            dateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            dateLabel.heightAnchor.constraint(equalToConstant: 18)
         ])
     }
     
@@ -87,6 +98,7 @@ class UserInfoViewController: UIViewController {
                     self.add(child: GFUserInfoHeaderViewController(user: user), to: self.headerView)
                     self.add(child: GFRepoItemViewController(user: user), to: self.itemViewOne)
                     self.add(child: GFFollowerItemViewController(user: user), to: self.itemViewTwo)
+                    self.dateLabel.text = "Github since \(user.createdAt.convertToDisplayFormat())"
                 }
             case .failure(let error):
                 self.presentGFAlertOnMainThread(
