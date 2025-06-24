@@ -16,13 +16,68 @@ class UserInfoViewController: UIViewController {
         return view
     }()
     
+    private let itemViewStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 20
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    private let itemViewOne: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let itemViewTwo: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configure()
+        getUserInfo()
+        buildViewHierarchy()
+        buildConstraints()
+    }
+    
+    private func buildViewHierarchy() {
+        view.addSubview(headerView)
+        view.addSubview(itemViewStackView)
+        itemViewStackView.addArrangedSubview(itemViewOne)
+        itemViewStackView.addArrangedSubview(itemViewTwo)
+    }
+    
+    private func buildConstraints() {
+        let padding: CGFloat = 20
+        let itemHeight: CGFloat = 140
+        
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 180),
+            
+            itemViewStackView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
+            itemViewStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
+            itemViewStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            itemViewStackView.heightAnchor.constraint(equalToConstant: itemHeight * 2),
+        ])
+    }
+    
+    private func configure() {
         view.backgroundColor = .systemBackground
         
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
         navigationItem.rightBarButtonItem = doneButton
-        
+    }
+    
+    private func getUserInfo() {
         NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
             guard let self = self else { return }
             
@@ -30,6 +85,8 @@ class UserInfoViewController: UIViewController {
             case .success(let user):
                 DispatchQueue.main.async {
                     self.add(child: GFUserInfoHeaderViewController(user: user), to: self.headerView)
+                    self.add(child: GFRepoItemViewController(user: user), to: self.itemViewOne)
+                    self.add(child: GFFollowerItemViewController(user: user), to: self.itemViewTwo)
                 }
             case .failure(let error):
                 self.presentGFAlertOnMainThread(
@@ -38,21 +95,6 @@ class UserInfoViewController: UIViewController {
                 )
             }
         }
-        buildViewHierarchy()
-        buildConstraints()
-    }
-    
-    private func buildViewHierarchy() {
-        view.addSubview(headerView)
-    }
-    
-    private func buildConstraints() {
-        NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 180)
-        ])
     }
     
     private func add(child: UIViewController, to containerView: UIView) {
