@@ -7,8 +7,14 @@
 
 import UIKit
 
+protocol UserInfoViewControllerDelegate: AnyObject {
+    func didTapGithubProfile(for user: User)
+    func didTapGetFollowers(for user: User)
+}
+
 class UserInfoViewController: UIViewController {
     var username: String!
+    weak var delegate: FollowerListViewControllerDelegate!
     
     private let headerView: UIView = {
         let view = UIView()
@@ -95,10 +101,7 @@ class UserInfoViewController: UIViewController {
             switch result {
             case .success(let user):
                 DispatchQueue.main.async {
-                    self.add(child: GFUserInfoHeaderViewController(user: user), to: self.headerView)
-                    self.add(child: GFRepoItemViewController(user: user), to: self.itemViewOne)
-                    self.add(child: GFFollowerItemViewController(user: user), to: self.itemViewTwo)
-                    self.dateLabel.text = "Github since \(user.createdAt.convertToDisplayFormat())"
+                    self.configureUIElements(with: user)
                 }
             case .failure(let error):
                 self.presentGFAlertOnMainThread(
@@ -107,6 +110,19 @@ class UserInfoViewController: UIViewController {
                 )
             }
         }
+    }
+    
+    private func configureUIElements(with user: User) {
+        let repoItemViewController = GFRepoItemViewController(user: user)
+        let followerItemViewController = GFFollowerItemViewController(user: user)
+        
+        repoItemViewController.delegate = self
+        followerItemViewController.delegate = self
+        
+        self.add(child: GFUserInfoHeaderViewController(user: user), to: self.headerView)
+        self.add(child: repoItemViewController, to: self.itemViewOne)
+        self.add(child: followerItemViewController, to: self.itemViewTwo)
+        self.dateLabel.text = "Github since \(user.createdAt.convertToDisplayFormat())"
     }
     
     private func add(child: UIViewController, to containerView: UIView) {
@@ -121,5 +137,27 @@ class UserInfoViewController: UIViewController {
 extension UserInfoViewController {
     @objc private func dismissViewController() {
         dismiss(animated: true)
+    }
+}
+
+// MARK: - UserInfoViewControllerDelegate
+extension UserInfoViewController: UserInfoViewControllerDelegate {
+    func didTapGithubProfile(for user: User) {
+        guard let url = URL(string: user.htmlUrl) else {
+            presentGFAlertOnMainThread(title: "Invalid URL", message: "The provided URL is invalid")
+            return
+        }
+        
+        presentSafariViewController(url: url)
+    }
+
+    func didTapGetFollowers(for user: User) {
+        guard user.followers != 0 else {
+            presentGFAlertOnMainThread(title: "No Followers", message: "This user has no followers")
+            return
+        }
+        
+        delegate.didRequestFollowers(for: user.login)
+        dismissViewController()
     }
 }

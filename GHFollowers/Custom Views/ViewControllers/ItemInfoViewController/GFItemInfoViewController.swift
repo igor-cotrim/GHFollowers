@@ -9,6 +9,7 @@ import UIKit
 
 class GFItemInfoViewController: UIViewController {
     var user: User!
+    weak var delegate: UserInfoViewControllerDelegate!
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -32,6 +33,7 @@ class GFItemInfoViewController: UIViewController {
     
     let actionButton: GFButton = {
         let button = GFButton()
+        button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -77,4 +79,9 @@ class GFItemInfoViewController: UIViewController {
             actionButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
+}
+
+// MARK: - objc methods
+extension GFItemInfoViewController {
+    @objc func actionButtonTapped() {}
 }
