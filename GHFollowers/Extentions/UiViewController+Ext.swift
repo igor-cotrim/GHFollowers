@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-fileprivate var containerView: UIView!
+fileprivate var containerView: UIView?
 
 extension UIViewController {
     func presentGFAlertOnMainThread(title: String, message: String, buttonTitle: String = "Ok") {
@@ -28,8 +28,9 @@ extension UIViewController {
     
     func showLoadingView() {
         containerView = UIView(frame: view.bounds)
-        view.addSubview(containerView)
+        guard let containerView = containerView else { return }
         
+        view.addSubview(containerView)
         containerView.backgroundColor = .systemBackground
         containerView.alpha = 0
         
@@ -52,8 +53,8 @@ extension UIViewController {
     
     func dismissLoadingView() {
         DispatchQueue.main.async {
+            guard let containerView = containerView else { return }
             containerView.removeFromSuperview()
-            containerView = nil
         }
     }
     
