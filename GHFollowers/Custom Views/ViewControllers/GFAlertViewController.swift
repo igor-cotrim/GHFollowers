@@ -14,13 +14,8 @@ class GFAlertViewController: UIViewController {
     
     let padding: CGFloat = 20
     
-    let containertView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemBackground
-        view.layer.cornerRadius = 16
-        view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.white.cgColor
-        view.translatesAutoresizingMaskIntoConstraints = false
+    let containertView: GFAlertContainerView = {
+        let view = GFAlertContainerView()
         return view
     }()
     
@@ -55,8 +50,7 @@ class GFAlertViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
         
         buildViewHierarchy()
         buildConstraints()
