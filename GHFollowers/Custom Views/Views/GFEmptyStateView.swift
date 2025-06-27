@@ -16,7 +16,7 @@ class GFEmptyStateView: UIView {
     }()
     
     private let logoImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "empty-state-logo"))
+        let imageView = UIImageView(image: Images.emptyStateLogo)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         return imageView
