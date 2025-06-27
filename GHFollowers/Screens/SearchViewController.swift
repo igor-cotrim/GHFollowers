@@ -25,7 +25,6 @@ class SearchViewController: UIViewController {
         return button
     }()
     
-    var logoImageViewTopConstraint: NSLayoutConstraint!
     var isUsernameEntered: Bool {
         !usernameTextField.text!.isEmpty
     }

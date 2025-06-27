@@ -8,13 +8,12 @@
 import UIKit
 
 protocol UserInfoViewControllerDelegate: AnyObject {
-    func didTapGithubProfile(for user: User)
-    func didTapGetFollowers(for user: User)
+    func didRequestFollowers(for username: String)
 }
 
 class UserInfoViewController: UIViewController {
     var username: String!
-    weak var delegate: FollowerListViewControllerDelegate!
+    weak var delegate: UserInfoViewControllerDelegate!
     
     private let headerView: UIView = {
         let view = UIView()
@@ -71,7 +70,7 @@ class UserInfoViewController: UIViewController {
             headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 180),
+            headerView.heightAnchor.constraint(equalToConstant: 210),
             
             itemViewStackView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
             itemViewStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
@@ -81,7 +80,7 @@ class UserInfoViewController: UIViewController {
             dateLabel.topAnchor.constraint(equalTo: itemViewStackView.bottomAnchor, constant: padding),
             dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             dateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            dateLabel.heightAnchor.constraint(equalToConstant: 18)
+            dateLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -111,15 +110,9 @@ class UserInfoViewController: UIViewController {
     }
     
     private func configureUIElements(with user: User) {
-        let repoItemViewController = GFRepoItemViewController(user: user)
-        let followerItemViewController = GFFollowerItemViewController(user: user)
-        
-        repoItemViewController.delegate = self
-        followerItemViewController.delegate = self
-        
         self.add(child: GFUserInfoHeaderViewController(user: user), to: self.headerView)
-        self.add(child: repoItemViewController, to: self.itemViewOne)
-        self.add(child: followerItemViewController, to: self.itemViewTwo)
+        self.add(child: GFRepoItemViewController(user: user,delegate: self), to: self.itemViewOne)
+        self.add(child: GFFollowerItemViewController(user: user, delegate: self), to: self.itemViewTwo)
         self.dateLabel.text = "Github since \(user.createdAt.convertToMonthYearFormat())"
     }
     
@@ -131,15 +124,9 @@ class UserInfoViewController: UIViewController {
     }
 }
 
-// MARK: - objc functions
-extension UserInfoViewController {
-    @objc private func dismissViewController() {
-        dismiss(animated: true)
-    }
-}
+// MARK: - GFFollowerItemViewControllerDelegate & GFRepoItemViewControllerDelegate
 
-// MARK: - UserInfoViewControllerDelegate
-extension UserInfoViewController: UserInfoViewControllerDelegate {
+extension UserInfoViewController: GFFollowerItemViewControllerDelegate, GFRepoItemViewControllerDelegate {
     func didTapGithubProfile(for user: User) {
         guard let url = URL(string: user.htmlUrl) else {
             presentGFAlertOnMainThread(title: "Invalid URL", message: "The provided URL is invalid")
@@ -157,5 +144,13 @@ extension UserInfoViewController: UserInfoViewControllerDelegate {
         
         delegate.didRequestFollowers(for: user.login)
         dismissViewController()
+    }
+}
+
+// MARK: - objc functions
+
+extension UserInfoViewController {
+    @objc private func dismissViewController() {
+        dismiss(animated: true)
     }
 }
