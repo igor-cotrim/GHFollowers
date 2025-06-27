@@ -34,8 +34,7 @@ class GFEmptyStateView: UIView {
     }
     
     private func buildViewHierarchy() {
-        addSubview(messageLabel)
-        addSubview(logoImageView)
+        addSubviews(messageLabel, logoImageView)
     }
     
     private func buildConstraints() {

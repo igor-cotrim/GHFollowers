@@ -58,11 +58,9 @@ class UserInfoViewController: UIViewController {
     }
     
     private func buildViewHierarchy() {
-        view.addSubview(headerView)
-        view.addSubview(itemViewStackView)
+        view.addSubviews(headerView, itemViewStackView, dateLabel)
         itemViewStackView.addArrangedSubview(itemViewOne)
         itemViewStackView.addArrangedSubview(itemViewTwo)
-        view.addSubview(dateLabel)
     }
     
     private func buildConstraints() {

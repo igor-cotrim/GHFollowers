@@ -33,7 +33,6 @@ class GFItemInfoViewController: UIViewController {
     
     let actionButton: GFButton = {
         let button = GFButton()
-        button.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -54,13 +53,13 @@ class GFItemInfoViewController: UIViewController {
         
         buildViewHierarchy()
         buildConstraints()
+        setup()
     }
     
     private func buildViewHierarchy() {
-        view.addSubview(stackView)
+        view.addSubviews(stackView, actionButton)
         stackView.addArrangedSubview(itemInfoViewOne)
         stackView.addArrangedSubview(itemInfoViewTwo)
-        view.addSubview(actionButton)
     }
     
     private func buildConstraints() {
@@ -78,6 +77,10 @@ class GFItemInfoViewController: UIViewController {
             actionButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             actionButton.heightAnchor.constraint(equalToConstant: 44)
         ])
+    }
+    
+    private func setup() {
+        actionButton.addTarget(self, action: #selector(actionButtonTapped), for: .touchUpInside)
     }
 }
 

@@ -33,8 +33,7 @@ class FavoriteCell: UITableViewCell {
     }
     
     private func buildViewHierarchy() {
-        addSubview(avatarImageView)
-        addSubview(usernameLabel)
+        addSubviews(avatarImageView, usernameLabel)
     }
     
     private func buildConstraints() {

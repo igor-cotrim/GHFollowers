@@ -42,9 +42,7 @@ class GFItemInfoView: UIView {
     }
     
     private func buildViewHierarchy() {
-        addSubview(symbolImageView)
-        addSubview(titleLabel)
-        addSubview(countLabel)
+        addSubviews(symbolImageView, titleLabel, countLabel)
     }
     
     private func buildConstraints() {

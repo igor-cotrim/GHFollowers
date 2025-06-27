@@ -32,7 +32,6 @@ class GFAlertViewController: UIViewController {
     
     let actionButton: GFButton = {
         let button = GFButton(backgroundColor: .systemPink, title: "Ok")
-        button.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
         return button
     }()
     
@@ -59,9 +58,7 @@ class GFAlertViewController: UIViewController {
     
     private func buildViewHierarchy() {
         view.addSubview(containertView)
-        containertView.addSubview(titleLabel)
-        containertView.addSubview(messageLabel)
-        containertView.addSubview(actionButton)
+        containertView.addSubviews(titleLabel, messageLabel, actionButton)
     }
     
     private func buildConstraints() {
@@ -92,6 +89,7 @@ class GFAlertViewController: UIViewController {
         titleLabel.text = alertTitle ?? "Something went wrong"
         messageLabel.text = message ?? "Unable to complete request"
         actionButton.setTitle(buttonTitle ?? "OK", for: .normal)
+        actionButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
     }
 }
 

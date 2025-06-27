@@ -32,8 +32,7 @@ class FollowerCell: UICollectionViewCell {
     }
     
     private func buildViewHierarchy() {
-        contentView.addSubview(avatarImageView)
-        contentView.addSubview(usernameLabel)
+        contentView.addSubviews(avatarImageView, usernameLabel)
     }
     
     private func buildConstraints() {
