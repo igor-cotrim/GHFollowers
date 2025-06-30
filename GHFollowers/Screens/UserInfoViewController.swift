@@ -15,6 +15,18 @@ class UserInfoViewController: UIViewController {
     var username: String!
     weak var delegate: UserInfoViewControllerDelegate!
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let headerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +69,9 @@ class UserInfoViewController: UIViewController {
     }
     
     private func buildViewHierarchy() {
-        view.addSubviews(headerView, itemViewStackView, dateLabel)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(headerView, itemViewStackView, dateLabel)
         itemViewStackView.addArrangedSubview(itemViewOne)
         itemViewStackView.addArrangedSubview(itemViewTwo)
     }
@@ -65,21 +79,27 @@ class UserInfoViewController: UIViewController {
     private func buildConstraints() {
         let padding: CGFloat = 20
         let itemHeight: CGFloat = 140
+
+        scrollView.pinToEdges(of: view)
+        contentView.pinToEdges(of: scrollView)
         
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 210),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(equalToConstant: 600),
+            
+            headerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            headerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            headerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
+            headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 210),
             
             itemViewStackView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: padding),
-            itemViewStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            itemViewStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            itemViewStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            itemViewStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             itemViewStackView.heightAnchor.constraint(equalToConstant: itemHeight * 2),
             
             dateLabel.topAnchor.constraint(equalTo: itemViewStackView.bottomAnchor, constant: padding),
-            dateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
-            dateLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
+            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             dateLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
     }

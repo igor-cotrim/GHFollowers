@@ -39,7 +39,7 @@ class GFUserInfoHeaderViewController: UIViewController {
     
     private let bioLabel: GFBodyLabel = {
         let label = GFBodyLabel(textAligment: .left)
-        label.numberOfLines = 3
+        label.numberOfLines = 0
         return label
     }()
     
@@ -103,7 +103,7 @@ class GFUserInfoHeaderViewController: UIViewController {
             bioLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: textImagePadding),
             bioLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             bioLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
-            bioLabel.heightAnchor.constraint(equalToConstant: 90),
+            bioLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 90),
         ])
     }
     
