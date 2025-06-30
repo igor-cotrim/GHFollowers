@@ -12,7 +12,7 @@ protocol GFFollowerItemViewControllerDelegate: AnyObject {
 }
 
 class GFFollowerItemViewController: GFItemInfoViewController {
-    weak var delegate: GFFollowerItemViewControllerDelegate!
+    private weak var delegate: GFFollowerItemViewControllerDelegate!
     
     init(user: User, delegate: GFFollowerItemViewControllerDelegate) {
         super.init(user: user)

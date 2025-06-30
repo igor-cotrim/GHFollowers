@@ -10,12 +10,12 @@ import UIKit
 class FollowerCell: UICollectionViewCell {
     static let reuseIdentifier = "FollowerCell"
     
-    let avatarImageView: GFAvatarImageView = {
+    private let avatarImageView: GFAvatarImageView = {
         let imageView = GFAvatarImageView(frame: .zero)
         return imageView
     }()
     
-    let usernameLabel: GFTitleLabel = {
+    private let usernameLabel: GFTitleLabel = {
         let label = GFTitleLabel(textAlignment: .center, fontSize: 16)
         return label
     }()
@@ -53,12 +53,6 @@ class FollowerCell: UICollectionViewCell {
     
     func setup(follower: Follower) {
         usernameLabel.text = follower.login
-        NetworkManager.shared.downloadImage(from: follower.avatarUrl) { [weak self] image in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                self.avatarImageView.image = image
-            }
-        }
+        avatarImageView.downloadImage(fromURL: follower.avatarUrl)
     }
 }

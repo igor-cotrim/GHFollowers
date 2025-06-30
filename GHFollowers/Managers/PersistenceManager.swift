@@ -30,7 +30,6 @@ enum PersistenceManager {
                     }
                     
                     favorites.append(favorite)
-                    
                 case .remove:
                     favorites.removeAll { $0.login == favorite.login }
                 }

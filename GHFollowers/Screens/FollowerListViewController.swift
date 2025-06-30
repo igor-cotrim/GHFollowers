@@ -8,19 +8,19 @@
 import UIKit
 
 class FollowerListViewController: GFDataLoadingViewController {
-    enum Section {
+    private enum Section {
         case main
     }
     
-    var username: String!
-    var followers: [Follower] = []
-    var filteredFollowers: [Follower] = []
-    var page = 1
-    var hasMoreFollowers = true
-    var isSearching = false
-    var isLoadingMoreFollowers = false
-    var collectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, Follower>!
+    private var username: String!
+    private var followers: [Follower] = []
+    private var filteredFollowers: [Follower] = []
+    private var page = 1
+    private var hasMoreFollowers = true
+    private var isSearching = false
+    private var isLoadingMoreFollowers = false
+    private var collectionView: UICollectionView!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Follower>!
     
     init(username: String) {
         super.init(nibName: nil, bundle: nil)
@@ -96,11 +96,11 @@ class FollowerListViewController: GFDataLoadingViewController {
                     
                     DispatchQueue.main.async {
                         self.showEmptyStateView(message: message, in: self.view)
-                        return
                     }
+                    return
                 }
                 
-                self.updateData(on: followers)
+                self.updateData(on: self.followers)
             case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Bad Stuff Happened", message: error.rawValue)
             }

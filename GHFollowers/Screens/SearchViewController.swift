@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
         return button
     }()
     
-    var isUsernameEntered: Bool {
+    private var isUsernameEntered: Bool {
         !usernameTextField.text!.isEmpty
     }
     

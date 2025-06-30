@@ -12,7 +12,7 @@ protocol GFRepoItemViewControllerDelegate: AnyObject {
 }
 
 class GFRepoItemViewController: GFItemInfoViewController {
-    weak var delegate: GFRepoItemViewControllerDelegate!
+    private weak var delegate: GFRepoItemViewControllerDelegate!
     
     init(user: User, delegate: GFRepoItemViewControllerDelegate) {
         super.init(user: user)

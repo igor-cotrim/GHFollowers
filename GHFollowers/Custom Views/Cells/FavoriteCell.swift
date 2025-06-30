@@ -10,12 +10,12 @@ import UIKit
 class FavoriteCell: UITableViewCell {
     static let reuseIdentifier = "FavoriteCell"
     
-    let avatarImageView: GFAvatarImageView = {
+    private let avatarImageView: GFAvatarImageView = {
         let imageView = GFAvatarImageView(frame: .zero)
         return imageView
     }()
     
-    let usernameLabel: GFTitleLabel = {
+    private let usernameLabel: GFTitleLabel = {
         let label = GFTitleLabel(textAlignment: .left, fontSize: 26)
         return label
     }()
@@ -54,12 +54,6 @@ class FavoriteCell: UITableViewCell {
     
     func setup(favorite: Follower) {
         usernameLabel.text = favorite.login
-        NetworkManager.shared.downloadImage(from: favorite.avatarUrl) { [weak self] image in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                self.avatarImageView.image = image
-            }
-        }
+        avatarImageView.downloadImage(fromURL: favorite.avatarUrl)
     }
 }

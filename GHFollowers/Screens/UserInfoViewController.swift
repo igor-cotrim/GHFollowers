@@ -61,8 +61,11 @@ class UserInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .systemBackground
         
-        configure()
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
+        navigationItem.rightBarButtonItem = doneButton
+        
         getUserInfo()
         buildViewHierarchy()
         buildConstraints()
@@ -102,13 +105,6 @@ class UserInfoViewController: UIViewController {
             dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             dateLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
-    }
-    
-    private func configure() {
-        view.backgroundColor = .systemBackground
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissViewController))
-        navigationItem.rightBarButtonItem = doneButton
     }
     
     private func getUserInfo() {

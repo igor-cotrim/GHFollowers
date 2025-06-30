@@ -8,8 +8,8 @@
 import UIKit
 
 class GFAvatarImageView: UIImageView {
-    let cache = NetworkManager.shared.cache
-    let placeholderImage = Images.avatarPlaceholder
+    private let cache = NetworkManager.shared.cache
+    private let placeholderImage = Images.avatarPlaceholder
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,5 +31,15 @@ class GFAvatarImageView: UIImageView {
         image = placeholderImage
         translatesAutoresizingMaskIntoConstraints = false
         contentMode = .scaleAspectFill
+    }
+    
+    func downloadImage(fromURL url: String) {
+        NetworkManager.shared.downloadImage(from: url) { [weak self] image in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                self.image = image
+            }
+        }
     }
 }

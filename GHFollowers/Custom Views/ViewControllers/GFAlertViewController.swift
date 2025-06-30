@@ -8,29 +8,27 @@
 import UIKit
 
 class GFAlertViewController: UIViewController {
-    var alertTitle: String?
-    var message: String?
-    var buttonTitle: String?
+    private var alertTitle: String?
+    private var message: String?
+    private var buttonTitle: String?
     
-    let padding: CGFloat = 20
-    
-    let containertView: GFAlertContainerView = {
+    private let containertView: GFAlertContainerView = {
         let view = GFAlertContainerView()
         return view
     }()
     
-    let titleLabel: GFTitleLabel = {
+    private let titleLabel: GFTitleLabel = {
         let label = GFTitleLabel(textAlignment: .center, fontSize: 20)
         return label
     }()
     
-    let messageLabel: GFBodyLabel = {
+    private let messageLabel: GFBodyLabel = {
         let label = GFBodyLabel(textAligment: .center)
         label.numberOfLines = 4
         return label
     }()
     
-    let actionButton: GFButton = {
+    private let actionButton: GFButton = {
         let button = GFButton(backgroundColor: .systemPink, title: "Ok")
         return button
     }()
@@ -62,6 +60,8 @@ class GFAlertViewController: UIViewController {
     }
     
     private func buildConstraints() {
+        let padding: CGFloat = 20
+        
         NSLayoutConstraint.activate([
             containertView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             containertView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -96,7 +96,7 @@ class GFAlertViewController: UIViewController {
 // MARK: - @objc functions
 
 extension GFAlertViewController {
-    @objc func dismissViewController() {
+    @objc private func dismissViewController() {
         dismiss(animated: true)
     }
 }
