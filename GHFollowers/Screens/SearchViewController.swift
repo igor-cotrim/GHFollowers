@@ -21,7 +21,7 @@ class SearchViewController: UIViewController {
     }()
     
     private let callToActionButton: GFButton = {
-        let button = GFButton(backgroundColor: .systemGreen, title: "Get Followers")
+        let button = GFButton(color: .systemGreen, title: "Get Followers", systemImage: SFSymbols.followersButton!)
         return button
     }()
     

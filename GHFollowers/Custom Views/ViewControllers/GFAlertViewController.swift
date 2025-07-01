@@ -29,7 +29,7 @@ class GFAlertViewController: UIViewController {
     }()
     
     private let actionButton: GFButton = {
-        let button = GFButton(backgroundColor: .systemPink, title: "Ok")
+        let button = GFButton(color: .systemPink, title: "Ok", systemImage: SFSymbols.checkmark!)
         return button
     }()
     
