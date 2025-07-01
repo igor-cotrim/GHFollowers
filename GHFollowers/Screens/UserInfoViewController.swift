@@ -108,19 +108,17 @@ class UserInfoViewController: UIViewController {
     }
     
     private func getUserInfo() {
-        NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let user):
-                DispatchQueue.main.async {
-                    self.configureUIElements(with: user)
+        Task {
+            do {
+                let user = try await NetworkManager.shared.getUserInfo(for: username)
+                
+                configureUIElements(with: user)
+            } catch {
+                if let GFError = error as? GFError {
+                    presentGFAlert(title: "Something went wrong", message: GFError.rawValue)
+                } else {
+                    presentDefaultError()
                 }
-            case .failure(let error):
-                self.presentGFAlertOnMainThread(
-                    title: "Something went wrong",
-                    message: error.rawValue
-                )
             }
         }
     }
@@ -145,7 +143,9 @@ class UserInfoViewController: UIViewController {
 extension UserInfoViewController: GFFollowerItemViewControllerDelegate, GFRepoItemViewControllerDelegate {
     func didTapGithubProfile(for user: User) {
         guard let url = URL(string: user.htmlUrl) else {
-            presentGFAlertOnMainThread(title: "Invalid URL", message: "The provided URL is invalid")
+            DispatchQueue.main.async {
+                self.presentGFAlert(title: "Invalid URL", message: "The provided URL is invalid")
+            }
             return
         }
         
@@ -154,7 +154,9 @@ extension UserInfoViewController: GFFollowerItemViewControllerDelegate, GFRepoIt
 
     func didTapGetFollowers(for user: User) {
         guard user.followers != 0 else {
-            presentGFAlertOnMainThread(title: "No Followers", message: "This user has no followers")
+            DispatchQueue.main.async {
+                self.presentGFAlert(title: "No Followers", message: "This user has no followers")
+            }
             return
         }
         

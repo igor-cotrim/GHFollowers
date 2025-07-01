@@ -97,7 +97,9 @@ extension SearchViewController: UITextFieldDelegate {
 extension SearchViewController {
     @objc private func pushFollowerListViewController() {
         guard isUsernameEntered else {
-            presentGFAlertOnMainThread(title: "Empty username", message: "Please enter a username. We need to know who to look for on GitHub!")
+            DispatchQueue.main.async {
+                self.presentGFAlert(title: "Empty username", message: "Please enter a username. We need to know who to look for on GitHub!")
+            }
             return
         }
         
