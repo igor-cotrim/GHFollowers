@@ -16,7 +16,7 @@ class GFDataLoadingViewController: UIViewController {
     
     func showLoadingView() {
         containerView = UIView(frame: view.bounds)
-        guard let containerView = containerView else { return }
+        guard let containerView else { return }
         
         view.addSubview(containerView)
         containerView.backgroundColor = .systemBackground
