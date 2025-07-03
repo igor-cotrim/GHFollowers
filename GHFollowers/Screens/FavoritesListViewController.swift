@@ -33,6 +33,19 @@ class FavoritesListViewController: GFDataLoadingViewController {
         getFavorites()
     }
     
+    override func updateContentUnavailableConfiguration(using state: UIContentUnavailableConfigurationState) {
+        if favorites.isEmpty {
+            var config = UIContentUnavailableConfiguration.empty()
+            
+            config.image = .init(systemName: "star")
+            config.text = "No favorites yet"
+            config.secondaryText = "Add a favorite on the followers list by tapping the plus icon"
+            contentUnavailableConfiguration = config
+        } else {
+            contentUnavailableConfiguration = nil
+        }
+    }
+    
     private func buildViewHierarchy() {
         view.addSubview(tableView)
     }
@@ -49,15 +62,11 @@ class FavoritesListViewController: GFDataLoadingViewController {
             
             switch favorites {
             case .success(let favorites):
-                if favorites.isEmpty {
-                    self.showEmptyStateView(message: "No favorites yet\nAdd some by following users", in: self.view)
-                } else {
-                    self.favorites = favorites
-                    
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.view.bringSubviewToFront(self.tableView)
-                    }
+                self.favorites = favorites
+                setNeedsUpdateContentUnavailableConfiguration()
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.view.bringSubviewToFront(self.tableView)
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
@@ -99,9 +108,7 @@ extension FavoritesListViewController: UITableViewDelegate, UITableViewDataSourc
             guard let error else {
                 self.favorites.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .left)
-                if self.favorites.isEmpty {
-                    self.showEmptyStateView(message: "No favorites yet\nAdd some by following users", in: self.view)
-                }
+                setNeedsUpdateContentUnavailableConfiguration()
                 return
             }
             

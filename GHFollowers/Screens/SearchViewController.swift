@@ -111,3 +111,7 @@ extension SearchViewController {
         navigationController?.pushViewController(followerListViewController, animated: true)
     }
 }
+
+#Preview {
+    SearchViewController()
+}
